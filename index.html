@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EasternLiving — A Living System</title>
+  
+  <!-- Google Fonts import as specified -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400&family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Shippori+Mincho+B1:wght@600&display=swap" rel="stylesheet">
+
+  <style>
+    /* CSS Custom Properties */
+    :root {
+      --color-ink:        #1A1714;
+      --color-paper:      #F5F0E8;
+      --color-parchment:  #EDE6D6;
+      --color-bronze:     #8B6914;
+      --color-celadon:    #6B8F71;
+      --color-stone:      #8C8680;
+      --color-vellum:     #D5CCB8;
+      --color-lacquer:    #2C1A0E;
+
+      --font-display:  'Shippori Mincho B1', 'Noto Serif', serif;
+      --font-body:     'Noto Serif', Georgia, serif;
+      --font-ui:       'Jost', sans-serif;
+
+      --line-body:     1.85;
+      --line-display:  1.15;
+      --radius:        0;
+
+      --transition:    0.4s ease;
+
+      --space-section: 120px;
+      --space-block:   64px;
+      --space-element: 32px;
+
+      --content-width: 720px;
+      --site-width:    1200px;
+    }
+
+    /* Reset & Base Styles */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--color-paper);
+      color: var(--color-ink);
+      font-family: var(--font-body);
+      font-size: 18px;
+      line-height: var(--line-body);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Typography Utilities */
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      line-height: var(--line-display);
+      letter-spacing: -0.02em;
+    }
+
+    .label {
+      font-family: var(--font-ui);
+      font-weight: 300;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-stone);
+      display: inline-block;
+    }
+
+    .caption {
+      font-family: var(--font-ui);
+      font-weight: 300;
+      font-size: 12px;
+      color: var(--color-stone);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color var(--transition), border-color var(--transition);
+      border-bottom: 1px solid transparent;
+    }
+
+    a:hover {
+      border-bottom-color: var(--color-bronze);
+    }
+
+    /* Layout Elements */
+    .container {
+      max-width: var(--site-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .content-column {
+      max-width: var(--content-width);
+      margin: 0 auto;
+    }
+
+    section {
+      padding: var(--space-section) 0;
+    }
+
+    /* Section Opener Component */
+    .section-opener {
+      text-align: center;
+      margin-bottom: var(--space-block);
+    }
+
+    .section-opener .brushstroke {
+      display: block;
+      margin: 12px auto 24px auto;
+    }
+
+    .section-opener h2 {
+      font-size: clamp(28px, 3.5vw, 42px);
+      color: var(--color-ink);
+    }
+
+    /* Header & Navigation */
+    header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 10;
+      padding: 32px 0;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-size: 24px;
+      color: #F0EBE0; /* High contrast on dark background */
+      border-bottom: none;
+    }
+    
+    .logo:hover {
+      border-bottom: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      font-family: var(--font-ui);
+      font-weight: 300;
+      font-size: 14px;
+      color: #F0EBE0;
+      border-bottom: 1px solid transparent;
+    }
+
+    .nav-links a:hover {
+      border-bottom-color: var(--color-bronze);
+    }
+
+    /* Mobile Nav Toggle */
+    .mobile-nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: #F0EBE0;
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    /* Hero Section (Full-bleed Lacquer) */
+    .hero {
+      background-color: var(--color-lacquer);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 120px; /* Accounts for header height */
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .hero h1 {
+      color: #F0EBE0;
+      font-size: clamp(48px, 8vw, 96px);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero-enso {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.06;
+    }
+
+    /* What is EasternLiving Section */
+    .overview p {
+      margin-bottom: var(--space-element);
+    }
+    
+    .overview p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Grid Layouts for Cards */
+    .grid {
+      display: grid;
+      gap: 32px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Cards (Parchment) */
+    .card {
+      background-color: var(--color-parchment);
+      border: 1px solid var(--color-vellum);
+      border-radius: var(--radius);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .card-top {
+      margin-bottom: 24px;
+    }
+
+    .card .label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .card h3 {
+      font-size: 22px;
+      margin-bottom: 16px;
+      color: var(--color-ink);
+    }
+
+    .card p {
+      font-size: 16px;
+      color: var(--color-ink);
+    }
+
+    .card .brushstroke {
+      margin: 24px 0 16px 0;
+    }
+
+    /* Practice Section & Celadon Accent Contexts */
+    .practice-item {
+      border-left: 2px solid var(--color-celadon);
+      padding-left: 24px;
+      margin-bottom: var(--space-block);
+    }
+
+    .practice-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .practice-item h3 {
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
+
+    .practice-accent {
+      color: var(--color-celadon);
+    }
+
+    /* Library Listing Component */
+    .library-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .library-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid var(--color-vellum);
+      padding-bottom: 16px;
+    }
+
+    .library-meta {
+      display: flex;
+      gap: 24px;
+    }
+
+    /* Newsletter Form */
+    .newsletter-form {
+      max-width: 480px;
+      margin: var(--space-block) auto 0 auto;
+      text-align: center;
+    }
+
+    .newsletter-description {
+      margin-bottom: var(--space-element);
+    }
+
+    .input-group {
+      display: flex;
+      border: 1px solid var(--color-vellum);
+    }
+
+    .input-group input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 16px;
+      font-family: var(--font-body);
+      font-size: 16px;
+      color: var(--color-ink);
+      outline: none;
+    }
+
+    .input-group input::placeholder {
+      color: var(--color-stone);
+    }
+
+    .btn {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 300;
+      color: var(--color-ink);
+      background-color: transparent;
+      border: 1px solid var(--color-bronze);
+      padding: 16px 28px;
+      cursor: pointer;
+      transition: var(--transition);
+      border-radius: var(--radius);
+    }
+
+    .btn:hover {
+      background-color: var(--color-bronze);
+      color: var(--color-paper);
+    }
+
+    /* Footer Section (Lacquer) */
+    footer {
+      background-color: var(--color-lacquer);
+      color: #F0EBE0;
+      padding: var(--space-section) 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer-container {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-block);
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .footer-tagline {
+      font-family: var(--font-display);
+      font-size: 22px;
+      max-width: 300px;
+      opacity: 0.8;
+    }
+
+    .footer-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .footer-nav a {
+      font-family: var(--font-ui);
+      font-weight: 300;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #F0EBE0;
+      opacity: 0.7;
+    }
+
+    .footer-nav a:hover {
+      opacity: 1;
+      border-bottom-color: var(--color-bronze);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(213, 204, 184, 0.15);
+      padding-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-enso {
+      position: absolute;
+      bottom: -40px;
+      right: -40px;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.04;
+    }
+
+    /* Mobile Full-screen Overlay Nav */
+    .mobile-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: var(--color-lacquer);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    .mobile-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-overlay-close {
+      position: absolute;
+      top: 32px;
+      right: 24px;
+      background: none;
+      border: none;
+      color: #F0EBE0;
+      font-family: var(--font-ui);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+    }
+
+    .mobile-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      text-align: center;
+    }
+
+    .mobile-menu a {
+      font-family: var(--font-display);
+      font-size: 32px;
+      color: #F0EBE0;
+    }
+
+    /* Micro Animations on Load */
+    .fade-in-section {
+      opacity: 0;
+      transform: translateY(12px);
+      animation: sectionEnter 0.6s ease forwards;
+    }
+
+    @keyframes sectionEnter {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 991px) {
+      .grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --space-section: 80px;
+        --space-block: 40px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .mobile-nav-toggle {
+        display: block;
+      }
+
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .library-item {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .footer-top {
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      /* Moving Enso for mobile layout context */
+      .enso-mobile-divider {
+        display: flex;
+        justify-content: center;
+        margin: var(--space-block) 0;
+      }
+      
+      .enso-mobile-divider svg {
+        width: 80px;
+        height: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Full-screen Mobile Overlay Menu -->
+  <div class="mobile-overlay" id="mobileOverlay">
+    <button class="mobile-overlay-close" id="closeMenu">Close</button>
+    <nav class="mobile-menu">
+      <a href="#philosophy">Philosophy</a>
+      <a href="#traditions">Traditions</a>
+      <a href="#practice">Practice</a>
+      <a href="#library">The Library</a>
+      <a href="#newsletter">Commission</a>
+    </nav>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="container nav-container">
+      <a href="#" class="logo">EasternLiving</a>
+      <nav class="nav-links">
+        <a href="#philosophy">Philosophy</a>
+        <a href="#traditions">Traditions</a>
+        <a href="#practice">Practice</a>
+        <a href="#library">The Library</a>
+        <a href="#newsletter">Commission</a>
+      </nav>
+      <button class="mobile-nav-toggle" id="openMenu">Menu</button>
+    </div>
+  </header>
+
+  <!-- 1. Hero Section -->
+  <section class="hero">
+    <div class="container hero-content fade-in-section">
+      <h1>A document of the way.</h1>
+    </div>
+    <!-- Hand-drawn SVG Enso background -->
+    <div class="hero-enso">
+      <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" width="400" height="400" aria-hidden="true">
+        <path
+          d="M 200,40 
+             C 310,40 370,120 370,200 
+             C 370,300 300,360 200,360 
+             C 100,360 30,290 30,200 
+             C 30,110 90,40 195,40"
+          fill="none"
+          stroke="#8B6914"
+          stroke-width="2.5"
+          stroke-linecap="round"
+        />
+      </svg>
+    </div>
+  </section>
+
+  <!-- 2. What is Eastern Living Section -->
+  <section id="philosophy" class="fade-in-section" style="animation-delay: 0.2s;">
+    <div class="container">
+      <div class="section-opener">
+        <span class="label">What is EasternLiving</span>
+        <!-- Brushstroke SVG rule -->
+        <svg class="brushstroke" viewBox="0 0 200 8" xmlns="http://www.w3.org/2000/svg" width="120" height="5" aria-hidden="true">
+          <path d="M0,4 Q20,2 40,4 Q80,6 120,3.5 Q160,1 200,4" fill="none" stroke="#8B6914" stroke-width="1.8" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+        <h2>An Inquiry into the Undivided</h2>
+      </div>
+      <div class="content-column overview">
+        <p>
+          The ancient traditions do not seek to compile lists of solutions, nor do they treat existence as an issue to be engineered. What was understood during the Axial Age in India, China, and Japan was that humanity suffers primarily when it attempts to separate itself from the wholeness of nature. 
+        </p>
+        <p>
+          To move slowly is to restore this connection. This space is not an aesthetic or a collection of trends; it is a cataloging of paths. We explore the deep, unhurried structures of life laid down in the Upanishads, the Tao Te Ching, Buddhist sutras, and Zen practices.
+        </p>
+        <p>
+          We do not offer summaries. We invite you to sit with the source texts, to participate in the ancient cycles, and to live in accordance with the way things are, rather than how they can be capitalized.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mobile Inline Enso Indicator -->
+  <div class="container enso-mobile-divider" style="display: none;">
+    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" width="80" height="80" aria-hidden="true">
+      <path d="M 200,40 C 310,40 370,120 370,200 C 370,300 300,360 200,360 C 100,360 30,290 30,200 C 30,110 90,40 195,40" fill="none" stroke="#8B6914" stroke-width="2.5" stroke-linecap="round" opacity="0.12"/>
+    </svg>
+  </div>
+
+  <!-- 3. The Four Pillars Section -->
+  <section class="fade-in-section">
+    <div class="container">
+      <div class="section-opener">
+        <span class="label">Structure</span>
+        <svg class="brushstroke" viewBox="0 0 200 8" xmlns="http://www.w3.org/2000/svg" width="120" height="5" aria-hidden="true">
+          <path d="M0,4 Q20,2 40,4 Q80,6 120,3.5 Q160,1 200,4" fill="none" stroke="#8B6914" stroke-width="1.8" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+        <h2>The Four Pillars</h2>
+      </div>
+      
+      <div class="grid grid-2">
+        <!-- Card 1: Mind -->
+        <div class="card">
+          <div class="card-top">
+            <div class="label-row">
+              <span class="label">Pillar I</span>
+              <!-- Heaven Trigram SVG -->
+              <svg viewBox="0 0 16 16" width="16" height="16" fill="#8C8680" aria-hidden="true">
+                <rect y="2" width="16" height="2"/>
+                <rect y="7" width="16" height="2"/>
+                <rect y="12" width="16" height="2"/>
+              </svg>
+            </div>
+            <h3>Mind</h3>
+            <p>The quiet landscape where thoughts rise and fall like mist over mountains. Rather than seeking to control the mind, we observe its seasons, returning slowly to the empty, open ground of awareness.</p>
+          </div>
+        </div>
+
+        <!-- Card 2: Body -->
+        <div class="card">
+          <div class="card-top">
+            <div class="label-row">
+              <span class="label">Pillar II</span>
+              <!-- Water Trigram SVG -->
+              <svg viewBox="0 0 16 16" width="16" height="16" fill="#8C8680" aria-hidden="true">
+                <rect y="2" width="7" height="2"/><rect x="9" y="2" width="7" height="2"/>
+                <rect y="7" width="16" height="2"/>
+                <rect y="12" width="7" height="2"/><rect x="9" y="12" width="7" height="2"/>
+              </svg>
+            </div>
+            <h3>Body</h3>
+            <p>The organic vessel that moves in cycles with the earth. Through deep somatic alignment and understanding, the body ceases to be an instrument to be optimized and becomes a source of ancient wisdom.</p>
+          </div>
+        </div>
+
+        <!-- Card 3: Ritual -->
+        <div class="card">
+          <div class="card-top">
+            <div class="label-row">
+              <span class="label">Pillar III</span>
+              <!-- Fire Trigram SVG -->
+              <svg viewBox="0 0 16 16" width="16" height="16" fill="#8C8680" aria-hidden="true">
+                <rect y="2" width="16" height="2"/>
+                <rect y="7" width="7" height="2"/><rect x="9" y="7" width="7" height="2"/>
+                <rect y="12" width="16" height="2"/>
+              </svg>
+            </div>
+            <h3>Ritual</h3>
+            <p>The deliberate gesture that turns everyday physical tasks into acts of deep respect. A single, quiet cup of tea, prepared with undivided focus, holds the weight of entire lineages within its steam.</p>
+          </div>
+        </div>
+
+        <!-- Card 4: Time -->
+        <div class="card">
+          <div class="card-top">
+            <div class="label-row">
+              <span class="label">Pillar IV</span>
+              <!-- Earth Trigram SVG -->
+              <svg viewBox="0 0 16 16" width="16" height="16" fill="#8C8680" aria-hidden="true">
+                <rect y="2" width="7" height="2"/><rect x="9" y="2" width="7" height="2"/>
+                <rect y="7" width="7" height="2"/><rect x="9" y="7" width="7" height="2"/>
+                <rect y="12" width="7" height="2"/><rect x="9" y="12" width="7" height="2"/>
+              </svg>
+            </div>
+            <h3>Time</h3>
+            <p>Not a straight line leading to a point of exhaustion, but the circular rhythm of seasons turning. There is no urgency in cyclical time; everything moves, rests, and matures exactly when it is ready.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Traditions Section -->
+  <section id="traditions" class="fade-in-section">
+    <div class="container">
+      <div class="section-opener">
+        <span class="label">Lineage</span>
+        <svg class="brushstroke" viewBox="0 0 200 8" xmlns="http://www.w3.org/2000/svg" width="120" height="5" aria-hidden="true">
+          <path d="M0,4 Q20,2 40,4 Q80,6 120,3.5 Q160,1 200,4" fill="none" stroke="#8B6914" stroke-width="1.8" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+        <h2>Six Core Traditions</h2>
+      </div>
+
+      <div class="grid grid-3">
+        <!-- Card: Taoism -->
+        <div class="card">
+          <div class="card-top">
+            <div class="label-row">
+              <span class="label">China</span>
+            </div>
+            <h3>The Way of Water</h3>
+            <p>Laozi understood that water yields to every hard surface but carves canyon walls over ages. Wu Wei is the action of absolute alignment, not passivity.</p>
+          </div>
+          <div>
+            <svg class="brushstroke" viewBox="0 0 200 8" xmlns="http://www.w3.org/2000/svg" width="100" height="4" aria-hidden="true">
+              <path d="M0,4 Q20,2 40,4 Q80,6 120,3.5 Q160,1 200,4" fill="none" stroke="#8B6914" stroke-width="1.8" stroke-linecap="round" opacity="0.4"/>
+            </svg>
+            <span class="caption">6th Century BCE</span>
+          </div>
+        </div>
+
+        <!-- Card: Buddhism -->
+        <div class="card">
+          <div class="card-top">
+            <div class="label-row">
+              <span class="label">India</span>
+            </div>
+            <h3>The Middle Way</h3>
+            <p>A path of radical observation, discarding the search for extreme positions to rest securely in the stillness of the present conditions.</p>
+          </div>
+          <div>
+            <svg class="brushstroke" viewBox="0 0 200 8" xmlns="http://www.w3.org/2000/svg" width="100" height="4" aria-hidden="true">
+              <path d="M0,4 Q20,2 40,4 Q80,6 120,3.5 Q160,1 200,4" fill="none" stroke="#8B6914" stroke-width="1.8" stroke-linecap="round" opacity="0.4"/>
+            </svg>
+            <span class="caption">5th Century BCE</span>
+          </div>
+        </div>
+
+        <!-- Card: Confucianism -->
+        <div class="card">
+          <div class="card-top">
+            <div class="label-row">
+              <span class="label">China</span>
+            </div>
+            <h3>The Ritual Order</h3>
+            <p>Creating harmony through formal dynamic relationships. Integrity begins within the family and moves outward, constructing a stable landscape.</p>
+          </div>
+          <div>
+            <svg class="brushstroke" viewBox="0 0 200 8" xmlns="http://www.w3.org/2000/svg" width="100" height="4" aria-hidden="true">
+              <path d="M0,4 Q20,2 40,4 Q80,6 120,3.5 Q160,1 200,4" fill="none" stroke="#8B6914" stroke-width="1.8" stroke-linecap="round" opacity="0.4"/>
+            </svg>
+            <span class="caption">5th Century BCE</span>
+          </div>
+        </div>
+
+        <!-- Card: Advaita Vedanta -->
+        <div class="card">
+          <div class="card-top">
+            <div class="label-row">
+              <span class="label">India</span>
+            </div>
+            <h3>The Non-Dual Self</h3>
+            <p>Recognizing that observer and observed share a single source. There is no division; reality is a vast ocean reflecting itself in many drops.</p>
+          </div>
+          <div>
+            <svg class="brushstroke" viewBox="0 0 200 8" xmlns="http://www.w3.org/2000/svg" width="100" height="4" aria-hidden="true">
+              <path d="M0,4 Q20,2 40,4 Q80,6 120,3.5 Q160,1 200,4" fill="none" stroke="#8B6914" stroke-width="1.8" stroke-linecap="round" opacity="0.4"/>
+            </svg>
+            <span class="caption">8th Century CE</span>
+          </div>
+        </div>
+
+        <!-- Card: Zen -->
+        <div class="card">
+          <div class="card-top">
+            <div class="label-row">
+              <span class="label">Japan</span>
+            </div>
+            <h3>Direct Pointing</h3>
+            <p>Relying not on words, texts, or conceptual maps, but experiencing actual reality as it manifests directly within the immediate breath.</p>
+          </div>
+          <div>
+            <svg class="brushstroke" viewBox="0 0 200 8" xmlns="http://www.w3.org/2000/svg" width="100" height="4" aria-hidden="true">
+              <path d="M0,4 Q20,2 40,4 Q80,6 120,3.5 Q160,1 200,4" fill="none" stroke="#8B6914" stroke-width="1.8" stroke-linecap="round" opacity="0.4"/>
+            </svg>
+            <span class="caption">12th Century CE</span>
+          </div>
+        </div>
+
+        <!-- Card: Shinto -->
+        <div class="card">
+          <div class="card-top">
+            <div class="label-row">
+              <span class="label">Japan</span>
+            </div>
+            <h3>The Living Forest</h3>
+            <p>Maintaining a quiet dialogue with the kami dwelling in deep rivers, old trees, and ancient rocks. Sacred space is found, not made.</p>
+          </div>
+          <div>
+            <svg class="brushstroke" viewBox="0 0 200 8" xmlns="http://www.w3.org/2000/svg" width="100" height="4" aria-hidden="true">
+              <path d="M0,4 Q20,2 40,4 Q80,6 120,3.5 Q160,1 200,4" fill="none" stroke="#8B6914" stroke-width="1.8" stroke-linecap="round" opacity="0.4"/>
+            </svg>
+            <span class="caption">Ancient Era</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Practice Section (Celadon Accents) -->
+  <section id="practice" class="fade-in-section">
+    <div class="container">
+      <div class="section-opener">
+        <span class="label">Application</span>
+        <svg class="brushstroke" viewBox="0 0 200 8" xmlns="http://www.w3.org/2000/svg" width="120" height="5" aria-hidden="true">
+          <path d="M0,4 Q20,2 40,4 Q80,6 120,3.5 Q160,1 200,4" fill="none" stroke="#8B6914" stroke-width="1.8" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+        <h2>Practicing the Way</h2>
+      </div>
+
+      <div class="content-column">
+        <!-- Practice: Cyclical Time -->
+        <div class="practice-item">
+          <span class="label practice-accent">Time</span>
+          <h3>Living with the Rhythms</h3>
+          <p>Aligning daily work and nourishment with the changing conditions of seasons, daylight, and nature. We recognize that human energy is naturally cyclical and must be allowed to settle into periods of quiet restoration.</p>
+        </div>
+
+        <!-- Practice: Yin-Yang -->
+        <div class="practice-item">
+          <span class="label practice-accent">Balance</span>
+          <h3>Holding the Polarities</h3>
+          <p>Observing how light implies shadow, and how action cannot exist without still incubation. Practice involves cultivating receptive, quiet space to match active focus and labor.</p>
+        </div>
+
+        <!-- Practice: Prana/Qi -->
+        <div class="practice-item">
+          <span class="label practice-accent">Vitality</span>
+          <h3>Nourishing the Breath</h3>
+          <p>Using structural movement and focused breath to maintain natural flows in the physical body. When breath is unhurried, thoughts naturally follow the same pattern.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. The Library Section -->
+  <section id="library" class="fade-in-section">
+    <div class="container">
+      <div class="section-opener">
+        <span class="label">Curation</span>
+        <svg class="brushstroke" viewBox="0 0 200 8" xmlns="http://www.w3.org/2000/svg" width="120" height="5" aria-hidden="true">
+          <path d="M0,4 Q20,2 40,4 Q80,6 120,3.5 Q160,1 200,4" fill="none" stroke="#8B6914" stroke-width="1.8" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+        <h2>The Reading Room</h2>
+      </div>
+
+      <div class="content-column">
+        <div class="library-list">
+          <!-- Text 1 -->
+          <div class="library-item">
+            <div>
+              <a href="#" class="label" style="color: var(--color-ink); font-weight: 400;">The Upanishads</a>
+              <p style="font-size: 15px; color: var(--color-stone); margin-top: 4px;">An inquiry into absolute nature and non-dual consciousness.</p>
+            </div>
+            <div class="library-meta">
+              <span class="caption">India</span>
+              <span class="caption">8th Century BCE</span>
+            </div>
+          </div>
+
+          <!-- Text 2 -->
+          <div class="library-item">
+            <div>
+              <a href="#" class="label" style="color: var(--color-ink); font-weight: 400;">Tao Te Ching</a>
+              <p style="font-size: 15px; color: var(--color-stone); margin-top: 4px;">Eighty-one quiet verses on the path of ease and alignment.</p>
+            </div>
+            <div class="library-meta">
+              <span class="caption">China</span>
+              <span class="caption">6th Century BCE</span>
+            </div>
+          </div>
+
+          <!-- Text 3 -->
+          <div class="library-item">
+            <div>
+              <a href="#" class="label" style="color: var(--color-ink); font-weight: 400;">The Dhammapada</a>
+              <p style="font-size: 15px; color: var(--color-stone); margin-top: 4px;">Sayings of the historical Buddha regarding clarity and mental focus.</p>
+            </div>
+            <div class="library-meta">
+              <span class="caption">India</span>
+              <span class="caption">5th Century BCE</span>
+            </div>
+          </div>
+
+          <!-- Text 4 -->
+          <div class="library-item">
+            <div>
+              <a href="#" class="label" style="color: var(--color-ink); font-weight: 400;">Zhuangzi</a>
+              <p style="font-size: 15px; color: var(--color-stone); margin-top: 4px;">Dynamic, philosophical parables addressing deep freedom and spontaneous living.</p>
+            </div>
+            <div class="library-meta">
+              <span class="caption">China</span>
+              <span class="caption">4th Century BCE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. The Slow Newsletter Section -->
+  <section id="newsletter" class="fade-in-section">
+    <div class="container">
+      <div class="newsletter-form">
+        <span class="label">Correspondence</span>
+        <p class="newsletter-description" style="margin-top: 16px;">A letter sent when there is something to say, and not before.</p>
+        <form action="#" method="POST" onsubmit="event.preventDefault();">
+          <div class="input-group">
+            <input type="email" placeholder="Your email address" required aria-label="Email address">
+            <button type="submit" class="btn">Enter</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Footer Section (Lacquer) -->
+  <footer>
+    <div class="container footer-container">
+      <div class="footer-top">
+        <div class="footer-tagline">
+          Not a wellness brand. Not a content site. A living system.
+        </div>
+        <nav class="footer-nav">
+          <a href="#philosophy">Philosophy</a>
+          <a href="#traditions">Traditions</a>
+          <a href="#practice">Practice</a>
+          <a href="#library">The Library</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span class="caption" style="color: rgba(240, 235, 224, 0.5);">© 2026 EasternLiving. All rights reserved.</span>
+        <span class="caption" style="color: rgba(240, 235, 224, 0.5); font-family: var(--font-ui); text-transform: uppercase;">Slower. Quieter. Older.</span>
+      </div>
+    </div>
+    
+    <!-- Enso positioned lower right inside the dark lacquer ground -->
+    <div class="footer-enso">
+      <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" width="300" height="300" aria-hidden="true">
+        <path
+          d="M 200,40 
+             C 310,40 370,120 370,200 
+             C 370,300 300,360 200,360 
+             C 100,360 30,290 30,200 
+             C 30,110 90,40 195,40"
+          fill="none"
+          stroke="#F5F0E8"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </svg>
+    </div>
+  </footer>
+
+  <!-- Script for Mobile Navigation Handling -->
+  <script>
+    const openMenuBtn = document.getElementById('openMenu');
+    const closeMenuBtn = document.getElementById('closeMenu');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const menuLinks = mobileOverlay.querySelectorAll('a');
+
+    openMenuBtn.addEventListener('click', () => {
+      mobileOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+
+    const closeMenu = () => {
+      mobileOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    };
+
+    closeMenuBtn.addEventListener('click', closeMenu);
+    
+    menuLinks.forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+  </script>
+</body>
+</html>
